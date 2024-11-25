@@ -1,7 +1,12 @@
 {% extends "template.html" %}
 {% block content %}
 
-<form method="POST" action="/autenticar">
+<!-- pode-se passar o 'url_for' para encontrar funcoes das rotas, ao inves da pagina 'html' -->
+<form method="POST" action="{{ url_for('autenticar') }}">
+    
+    <!-- inupt invisivel ao ususario, que recebe o valor da variavel 'proxima' na url , e assim o valor poder ser capturado pelo 'flask' e a funcao encaminhar para a pagina que estiver contida em 'proxima' -->
+    <input type="hidden" name="proxima" value="{{ proxima }}">
+
     <p><label>Nome de usuário:</label> <input class="form-control" type="text" name="usuario" required></p>
     <p><label>Senha:</label> <input class="form-control" type="password" name="senha" required></p>
     <p><button class="btn btn-primary" type="submit">Entrar</button></p>
