@@ -2,6 +2,10 @@
 from modules.jogo import Jogo
 from modules.usuario import Usuario
 
+# permite utilizar o 'ORM' que realiza a integracao e conexao entre o 'Flask' e o banco de dados 'MySQL'
+# o 'ORM' utulizado sera o 'SQLAlchemy'
+from flask_sqlalchemy import SQLAlchemy
+
 
 # 'render_template' > por padrao olha os arquivos dentro do diretorio 'templates'
 # 'resquest' > captura os valores dos abritudos 'name' dos arquivos 'html'
@@ -19,6 +23,19 @@ app = Flask(__name__)
 # criptografa os cookies, para ser usando em conunto com 'session[]'
 app.secret_key = 'chave_secreta'
 
+# realiza a configuracao da porta e conexao entre a classe  'Flask' que foi atribuido a variavel 'app' e o banco de dados 'MySQL' atraves do 'ORM' 'SQLAlchemy'
+# = \ (contra-barra) informa ao python que sera feita uma quebra de linha intencional
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
+        SGBD='mysql+mysqlconnector',
+        usuario='root',
+        senha='admin',
+        servidor='localhost',
+        database='jogoteca'
+)
+
+# inicializa o 'ORM' entre o banco de dados, atraves da classe 'SQLAlchemy', e a classe 'Flask', passando a variavel 'app' (classe 'Flask') como parametro para o 'ORM' na classe de 'SQLAlchemy'
+db = SQLAlchemy(app)
 
 # instancia estaticamente cada jogo com suas caracteristicas
 jogo1 = Jogo('god of war', 'aventura', 'play 2')
@@ -38,17 +55,17 @@ usuario4 = Usuario('diego paraguai', 'paraguai', '1235')
 
 # adiciona em um 'dicionario' chave='nickname' e valor='usuario'(objeto)
 lista_usuarios = {
-    usuario1.nickname : usuario1, 
-    usuario2.nickname : usuario2, 
-    usuario3.nickname : usuario3, 
-    usuario4.nickname : usuario4
+    usuario1.nickname: usuario1,
+    usuario2.nickname: usuario2,
+    usuario3.nickname: usuario3,
+    usuario4.nickname: usuario4
 }
 
 
 # rota da api
 @app.route('/')
 def index():
-    
+
     # 'render_template' > funcao do flask para conectar com o 'html'
     # 'titulo' > variavel criada com dupla-chaves no arquivo html '{{ }}'
     # 'lista_jogos' > sera enviado ao 'html' que vai iterar sobre ela utilizando 'foreach'
@@ -60,7 +77,7 @@ def index():
 # rota de pagina html, com formulario de cadastro
 @app.route('/novo')
 def novo():
-    
+
     # se nao existir sessao ou se a chave 'usuario_logado' for igual a none
     # garante que se o usuario nao estiver loga, entao noa acessarava esta pagina
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
@@ -91,10 +108,10 @@ def criar():
 # rota de pagina html, com formulario de login
 @app.route('/login')
 def login():
-    
+
     # recupera a informacao que foi passada para a 'query string', ou seja, o valor que estiver na variavel 'proxima' na url
     proxima = request.args.get('proxima')
-    
+
     # renderiza a pagina login, ja passando a 'query string' que foi recebida pela variavel
     return render_template('login.html', proxima=proxima)
 
@@ -102,15 +119,14 @@ def login():
 # rota de intermediaria, que valida as informacoes de login antes de passar para a pagina 'index'
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
-    
+
     # verifica que o usuario digitado esta em uma chave do dicionario 'lista_usuarios'
     if request.form['usuario'] in lista_usuarios:
-        
-        # caso 'usuario' seja encontrado no dicionario, entao armazena o seu nickname e utiliza-o para conferir se a senha deste 'usuario' confere com o valor cadastrado no objeto dele 
+
+        # caso 'usuario' seja encontrado no dicionario, entao armazena o seu nickname e utiliza-o para conferir se a senha deste 'usuario' confere com o valor cadastrado no objeto dele
         usuario = lista_usuarios[request.form['usuario']]
         if request.form['senha'] == usuario.senha:
-            
-                
+
             # 'session' permite armazenar dados de cookies, mas para isso, precisa de '.secretkey' para criptografar os cookies
             session['usuario_logado'] = usuario.nickname
 
@@ -123,7 +139,7 @@ def autenticar():
 
         else:
             flash('usuario ou senha invalido')
-            
+
             # url_for utiliza a funcao da rota ao inves pagina da rota
             return redirect(url_for('login'))
 
@@ -133,7 +149,7 @@ def autenticar():
 def logout():
     session['usuario_logado'] = None
     flash('logout efetuado com sucesso')
-    
+
     # url_for utiliza a funcao da rota ao inves pagina da rota
     return redirect(url_for('login'))
 
