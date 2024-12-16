@@ -11,7 +11,7 @@ def index():
     # 'lista_jogos' > sera enviado ao 'html' que vai iterar sobre ela utilizando 'foreach'
     # 'Jogos.query.order_by()' realiza leitura no banco de dados
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
-        return redirect('/login?proxima=')
+        return redirect('/login')
     lista_jogos = Jogos.query.order_by(Jogos.id)
     return render_template('lista.html', titulo='jogos', jogos=lista_jogos)
 
@@ -27,7 +27,7 @@ def novo():
     return render_template('novo.html', titulo='novo jogo')
 
 
-# rota de intermediaria, que recebe os valores do formulario sem passar pelo url do navegador
+# rota intermediaria, que recebe os valores do formulario sem passar pelo url do navegador
 @app.route('/criar', methods=['POST',])
 def criar():
 
@@ -49,6 +49,53 @@ def criar():
 
     # retorno para a rota '/' (index)
     # url_for utiliza a funcao da rota ao inves pagina da rota
+    return redirect(url_for('index'))
+
+
+# rota de pagina html, com formulario de editar um item cadastrado
+# ao clicar em algum jogo, id recebido via parametro do 'url_for'
+@app.route('/editar/<int:id>')
+def editar(id):
+    
+    # se, nao existir sessao, ou se, a chave 'usuario_logado' for igual a none
+    # garante que se, o usuario nao estiver logado, entao nao acessa esta pagina
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect('/login?proxima=editar')
+    
+    # renderiza a pagina com os dados do jogo que foi selecionado na pagina de lista
+    jogo = Jogos.query.filter_by(id=id).first()
+    return render_template('editar.html', titulo='editar jogo', jogo=jogo)
+
+
+# rota intermediaria, que atualiza um item selecionado na lista de jogos
+@app.route('/atualizar', methods=['POST',])
+def atualizar():
+    
+    # para atualizar o jogo, as novas informações sobrescrevem os dados que estavam no banco de dados
+    jogo = Jogos.query.filter_by(id=request.form['id']).first()
+    jogo.nome = request.form['nome']
+    jogo.categoria = request.form['categoria']
+    jogo.console = request.form['console']
+    
+    # ao adicionar o jogo com o mesmo id, ele sobrescreve o que estava gravado no banco de dado
+    db.session.add(jogo)
+    db.session.commit()
+    
+    return redirect(url_for('index'))
+
+
+# rota intermediaria, que deleta um item selecionado na lista de jogos
+@app.route('/deletar/<int:id>')
+def deletar(id):
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect('/login')
+    
+    # deleta a linha com a chave do jogo selecionado, pra isso recebe o id do jogo atraves do 'url_for'
+    Jogos.query.filter_by(id=id).delete()
+    db.session.commit()
+    
+    flash('jogo deletado com sucesso')
+
     return redirect(url_for('index'))
 
 
