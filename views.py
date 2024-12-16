@@ -56,13 +56,10 @@ def criar():
 # ao clicar em algum jogo, id recebido via parametro do 'url_for'
 @app.route('/editar/<int:id>')
 def editar(id):
-    
-    # se, nao existir sessao, ou se, a chave 'usuario_logado' for igual a none
-    # garante que se, o usuario nao estiver logado, entao nao acessa esta pagina
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect('/login?proxima=editar')
     
-    # renderiza a pagina com os dados do jogo que foi selecionado na pagina de lista
+    # renderiza a pagina 'editar.html' com os dados do jogo que foi selecionado na pagina de lista
     jogo = Jogos.query.filter_by(id=id).first()
     return render_template('editar.html', titulo='editar jogo', jogo=jogo)
 
@@ -80,7 +77,6 @@ def atualizar():
     # ao adicionar o jogo com o mesmo id, ele sobrescreve o que estava gravado no banco de dado
     db.session.add(jogo)
     db.session.commit()
-    
     return redirect(url_for('index'))
 
 
@@ -95,7 +91,6 @@ def deletar(id):
     db.session.commit()
     
     flash('jogo deletado com sucesso')
-
     return redirect(url_for('index'))
 
 
