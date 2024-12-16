@@ -17,6 +17,10 @@
             <td>{% print(jogo.nome) %}</td>
             <td>{% print(jogo.categoria) %}</td>
             <td>{% print(jogo.console) %}</td>
+
+            <!-- passa o 'id' do jogo como parametro para a rota 'editar' -->
+            <td><a href="{{ url_for('editar', id=jogo.id) }}">editar</a></td>
+            <td><a href="{{ url_for('deletar', id=jogo.id) }}">deletar</a></td>
         </tr>
         <!-- finaliza o foreach dentro do html -->
         {% endfor %}
