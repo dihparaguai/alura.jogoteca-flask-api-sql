@@ -46,6 +46,11 @@ def criar():
     # adiciona o objeto do jogo ao banco de dados
     db.session.add(novo_jogo)
     db.session.commit()
+    
+    # busca o arquivo atraves do 'resquest.files[]' e do 'name', para salvar na pasta 'uploads/'
+    # o nome do arquivo a ser salvo contem o numero do id e nome do novo jogo adicionado
+    arquivo = request.files['arquivo']
+    arquivo.save(f'uploads/id-{novo_jogo.id}_nome-{novo_jogo.nome}.jpg')
 
     # retorno para a rota '/' (index)
     # url_for utiliza a funcao da rota ao inves pagina da rota
