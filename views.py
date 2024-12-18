@@ -50,7 +50,10 @@ def criar():
     # busca o arquivo atraves do 'resquest.files[]' e do 'name', para salvar na pasta 'uploads/'
     # o nome do arquivo a ser salvo contem o numero do id e nome do novo jogo adicionado
     arquivo = request.files['arquivo']
-    arquivo.save(f'uploads/id-{novo_jogo.id}_nome-{novo_jogo.nome}.jpg')
+    
+    # usa o 'app.config[]' do Flask para buscar no dicionario formado pelo nome das variaveis que estao no arquivo 'config.py', e assim utilizar os dados atribuitos em 'UPLOAD_PATH' 
+    upload_path = app.config['UPLOAD_PATH']
+    arquivo.save(f'{upload_path}/capa{novo_jogo.id}.jpg')
 
     # retorno para a rota '/' (index)
     # url_for utiliza a funcao da rota ao inves pagina da rota

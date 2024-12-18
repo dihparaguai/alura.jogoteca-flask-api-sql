@@ -14,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 # '__name__' > referencia o nome do proprio arquivo
 app = Flask(__name__)
 
-#
+# '.config.from_pyfile()' adiciona todas as variaveis do arquivo 'config.py' num dicionario, e o Flask acessa automaticamente os dados atribuido a essas variaveis atraves dos nomes das chaves padronizadas = exemplo para configuracoes do banco de dados com sqlalchemy, o nome da variavel deve ser 'SQLALCHEMY_DATABASE_URI'
 app.config.from_pyfile('config.py')
 
 # inicializa o 'ORM' entre o banco de dados, atraves da classe 'SQLAlchemy', e a classe 'Flask', passando a variavel 'app' (classe 'Flask') como parametro para o 'ORM' na classe de 'SQLAlchemy'
