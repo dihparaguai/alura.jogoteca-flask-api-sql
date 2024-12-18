@@ -2,11 +2,12 @@
 {% block content %}
 
 <!-- metodo http que 'empurra' os dados para o servidor -->
-<!--  -->
+<!-- devido o enconding padrao 'x-www-form-urlencoded' nao enviar dados binarios, entao usa-se o enconding 'multipart/form-data' para que arquivos e imagens possam ser enviados pelo formulario -->
 <form action="/criar" method="POST" enctype="multipart/form-data">
 
-    <!--  -->
     <figure class="img-thumbnail col-md-4">
+    
+        <!-- para carregar a capa_padrao, foi passado o nome do arquivo para a rota que realiza a busca e o retorno da imagem para o formulario -->
         <img class="img-fluid" src="{{ url_for('imagem', nome_arquivo='capa_padrao.jpg') }}">
         <figcaption>
             <label class="file-container">
