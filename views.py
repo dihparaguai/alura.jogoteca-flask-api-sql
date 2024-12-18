@@ -1,4 +1,11 @@
-from flask import render_template, request, redirect, session, flash, url_for
+# 'render_template' > por padrao olha os arquivos dentro do diretorio 'templates'
+# 'resquest' > captura os valores dos abritudos 'name' dos arquivos 'html'
+# 'redirect' > biblioca com funcoes para redicionamento de paginas
+# 'session' > cookies do navegador, que guardar algumas informacoes, como nome do usuario logado
+# 'flash' > passar texo e informacoes para 'alert()' no navegador de forma personalizada
+# 'url_for' > permite passar a funcao que renderiza a pagina/rota html para o 'redirect()'
+# 'send_from_directory' > busca um arquivo/imagem em um diretorio para enviar para a pagina/rota
+from flask import render_template, request, redirect, send_from_directory, session, flash, url_for
 from jogoteca import db, app
 from modules import Usuarios, Jogos
 
@@ -153,3 +160,9 @@ def logout():
     
     # url_for utiliza a funcao da rota ao inves pagina da rota
     return redirect(url_for('login'))
+
+
+# a rota 'imagem' recebe o nome da imagem (capa_padrao) do html e usando o'send_from_directory', busca a imagem no diretorio 'uploads' e envia ela para o html
+@app.route('/imagem/<nome_arquivo>')
+def imagem(nome_arquivo):
+    return send_from_directory('uploads', nome_arquivo)

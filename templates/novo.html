@@ -5,8 +5,19 @@
 <!--  -->
 <form action="/criar" method="POST" enctype="multipart/form-data">
 
-    <!-- input que permite que arquivos sejam adicionados, aceitando jpg -->
-    <input type="file" name="arquivo" accept=".jpg">
+    <!--  -->
+    <figure class="img-thumbnail col-md-4">
+        <img class="img-fluid" src="{{ url_for('imagem', nome_arquivo='capa_padrao.jpg') }}">
+        <figcaption>
+            <label class="file-container">
+                mudar capa
+                
+                <!-- input que permite que arquivos sejam adicionados, aceitando jpg -->
+                <input type="file" name="arquivo" accept=".jpg">
+            </label>
+        </figcaption>
+    </figure>
+
 
     <fieldset>
         <div class="form-group">
