@@ -18,4 +18,4 @@ SQLALCHEMY_DATABASE_URI = \
 # '__file__' > retorna o caminho absoluto ou relativo até o arquivo atual, por isso é usado em conjunto com 'os.path.abspath()' para garantir o caminho completo absoluto
 # 'os.path.abspath()' > retorna o caminho absoluto completo até o arquivo passado como parametro = exemplo: "../arquivo.txt" vira "C:\Users\diego\arquivo.txt"
 # 'os.path.dirname()' > retorna o caminho absoluto completo até o diretorio do arquivo passao como parametro = exemplo: "C:\Users\diego\arquivo.txt" vira "C:\Users\diego"
-UPLOAD_PATH = os.path.dirname(os.path.abspath(__file__))+'/uploads'
+UPLOADS_PATH = os.path.dirname(os.path.abspath(__file__))+'/uploads'
