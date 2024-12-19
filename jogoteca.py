@@ -5,7 +5,11 @@
 # 'flash' > passar texo e informacoes para 'alert()' no navegador de forma personalizada
 # 'url_for' > permite passar a funcao que renderiza a pagina/rota html para o 'redirect()'
 from flask import Flask
+from flask import Flask
 
+# permite utilizar o 'ORM' que realiza a integracao e conexao entre o 'Flask' e o banco de dados 'MySQL'
+# o 'ORM' utulizado sera o 'SQLAlchemy'
+from flask_sqlalchemy import SQLAlchemy
 # permite utilizar o 'ORM' que realiza a integracao e conexao entre o 'Flask' e o banco de dados 'MySQL'
 # o 'ORM' utulizado sera o 'SQLAlchemy'
 from flask_sqlalchemy import SQLAlchemy
@@ -20,6 +24,8 @@ app.config.from_pyfile('config.py')
 # inicializa o 'ORM' entre o banco de dados, atraves da classe 'SQLAlchemy', e a classe 'Flask', passando a variavel 'app' (classe 'Flask') como parametro para o 'ORM' na classe de 'SQLAlchemy'
 db = SQLAlchemy(app)
 
+#
+from views import *
 #
 from views import *
 
