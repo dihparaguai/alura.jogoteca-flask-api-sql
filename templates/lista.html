@@ -1,6 +1,11 @@
 {% extends "template.html" %}
 {% block content %}
 
+<!-- botoes de navegacao -->
+<a class="btn btn-primary" href="{{ url_for('login') }}">login</a>
+<a class="btn btn-danger" href="{{ url_for('logout') }}">logout</a>
+<a class="btn btn-primary" href="{{ url_for('novo') }}">novo jogo</a>
+
 <table class="table table-striped table-responsive table-bordered">
     <thead class="thead-default">
         <tr>
