@@ -87,37 +87,45 @@ def editar(id):
 
     # renderiza a pagina 'editar.html' com os dados do jogo que foi selecionado na pagina de lista
     jogo = Jogos.query.filter_by(id=id).first()
+    
+    form = Formulario_jogo()
+    form.nome.data = jogo.nome
+    form.categoria.data = jogo.categoria
+    form.console.data = jogo.console
 
     capa_jogo = recupera_capa(id)
-    return render_template('editar.html', titulo='editar jogo', jogo=jogo, capa_jogo=capa_jogo)
+    return render_template('editar.html', titulo='editar jogo', id=id, capa_jogo=capa_jogo, form=form)
 
 
 # rota intermediaria, que atualiza um item selecionado na lista de jogos
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
-
-    # para atualizar o jogo, as novas informações sobrescrevem os dados que estavam no banco de dados
-    jogo = Jogos.query.filter_by(id=request.form['id']).first()
-    jogo.nome = request.form['nome']
-    jogo.categoria = request.form['categoria']
-    jogo.console = request.form['console']
-
-    # ao adicionar o jogo com o mesmo id, ele sobrescreve o que estava gravado no banco de dado
-    db.session.add(jogo)
-    db.session.commit()
-
-    arquivo = request.files['arquivo']
-    upload_path = app.config['UPLOADS_PATH']
+    form = Formulario_jogo(request.form)
     
-    # retorna o momento atual
-    timestamp = time.time()
-    
-    # deleta o antigo antigo, para nao ficar arquivos orfãos armazenados
-    deleta_capa_antiga(jogo.id)
-    arquivo.save(f'{upload_path}/capa{jogo.id}-{timestamp}.jpg')
+    if form.validate_on_submit():
 
-    # retorno para a rota '/' (index)
-    # url_for utiliza a funcao da rota ao inves pagina da rota
+        # para atualizar o jogo, as novas informações sobrescrevem os dados que estavam no banco de dados
+        jogo = Jogos.query.filter_by(id=request.form['id']).first()
+        jogo.nome = form.nome.data
+        jogo.categoria = form.console.data
+        jogo.console = form.console
+
+        # ao adicionar o jogo com o mesmo id, ele sobrescreve o que estava gravado no banco de dado
+        db.session.add(jogo)
+        db.session.commit()
+
+        arquivo = request.files['arquivo']
+        upload_path = app.config['UPLOADS_PATH']
+        
+        # retorna o momento atual
+        timestamp = time.time()
+        
+        # deleta o antigo antigo, para nao ficar arquivos orfãos armazenados
+        deleta_capa_antiga(jogo.id)
+        arquivo.save(f'{upload_path}/capa{jogo.id}-{timestamp}.jpg')
+
+        # retorno para a rota '/' (index)
+        # url_for utiliza a funcao da rota ao inves pagina da rota
     return redirect(url_for('index'))
 
 
