@@ -21,6 +21,9 @@
     <fieldset>
         <!-- input invisuvel para guardar o id do jogo a ser usado para atualizar o jogo no banco de dados -->
         <input type="hidden" name="id" value="{{ id }}">
+
+        <!-- para que o formulario seja realmente enviado para o servidor, precisa do csfr_toke() do flask_wtf -->
+        {{ form.csfr_token() }}
         
         <div class="form-group">
             {{ form.nome.label(class="form-label") }}

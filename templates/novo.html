@@ -21,6 +21,9 @@
 
 
     <fieldset>
+        <!-- para que o formulario seja realmente enviado para o servidor, precisa do csfr_toke() do flask_wtf -->
+        {{ form.csfr_token() }}
+        
         <div class="form-group">
             {{ form.nome.label(class="form-label") }}
             {{ form.nome(class="form-control") }}
