@@ -21,11 +21,10 @@
     </div>
     <div>
         {{ form.entrar(class="btn btn-primary") }}
+                
+        <!-- botao de navegacao -->
+        <a class="btn btn-danger" href="{{ url_for('index') }}">pagina inicial</a>
     </div>
-
 </form>
-
-<!-- botao de navegacao -->
-<a class="btn btn-danger" href="{{ url_for('index') }}">pagina inicial</a>
 
 {% endblock %}

@@ -13,6 +13,9 @@ from flask_sqlalchemy import SQLAlchemy
 # a partir do 'flask_wtf', deve-se utilizar o CSRF para garantir segurança em formularios web
 from flask_wtf.csrf import CSRFProtect
 
+# permite que a aplicacao flask possa utilizar as funcoes do gerador de senhas hash
+from flask_bcrypt import Bcrypt
+
 # 'Flask()' > classe que possui os comandos de http e api
 # '__name__' > referencia o nome do proprio arquivo
 app = Flask(__name__)
@@ -26,8 +29,12 @@ db = SQLAlchemy(app)
 # funciona como um token, que gera numeros aleatorios, garantindo a segurança em formularios 'html'
 csrf = CSRFProtect(app)
 
-# importa tudo que esta no arquivo 'views.py'
-from views import *
+#
+bcrypt = Bcrypt(app)
+
+# importa tudo que esta no arquivo 'views_game.py' e 'views_user.py'
+from views_game import *
+from views_user import *
 
 # coloca o servidor flask para rodar
 # 'debug=True' reinicializa o servidor automaticamente
