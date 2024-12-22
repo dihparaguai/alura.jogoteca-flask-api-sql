@@ -1,5 +1,15 @@
 import os
 from jogoteca import app
+from flask_wtf import FlaskForm
+from wtforms import StringField, validators, SubmitField
+
+
+class Formulario_jogo(FlaskForm):
+    nome = StringField('nome do jogo', [validators.DataRequired(), validators.Length(max=50, min=1)])
+    categoria = StringField('categoria', [validators.DataRequired(), validators.Length(max=40, min=1)])
+    console = StringField('console', [validators.DataRequired(), validators.Length(max=20, min=1)])
+    salvar = SubmitField('salvar')
+    
 
 # busca na pasta de arquivos o nome o arquivo especifico
 def recupera_capa(id):

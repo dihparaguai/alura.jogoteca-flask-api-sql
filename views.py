@@ -12,7 +12,7 @@ import time
 
 from jogoteca import db, app
 from modules import Usuarios, Jogos
-from helpers import deleta_capa_antiga, recupera_capa
+from helpers import Formulario_jogo, deleta_capa_antiga, recupera_capa
 
 # rota da api
 @app.route('/')
@@ -36,17 +36,22 @@ def novo():
     # garante que se o usuario nao estiver loga, entao noa acessarava esta pagina
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect('/login?proxima=novo')
-    return render_template('novo.html', titulo='novo jogo')
+    form = Formulario_jogo()
+    return render_template('novo.html', titulo='novo jogo', form=form)
 
 
 # rota intermediaria, que recebe os valores do formulario sem passar pelo url do navegador
 @app.route('/criar', methods=['POST',])
 def criar():
+    form = Formulario_jogo(request.form)
 
+    if form.validate_on_submit():
+        return redirect(url_for('novo'))
+    
     # atributos do formulario de cadastro
-    nome = request.form['nome']
-    categoria = request.form['categoria']
-    console = request.form['console']
+    nome = form.nome.data
+    categoria = form.categoria.data
+    console = form.console.data
 
     # verifica se o jogo que sera cadastrado ja existe no banco de dados
     if Jogos.query.filter_by(nome=nome).first():
