@@ -12,7 +12,7 @@ import time
 
 from jogoteca import db, app
 from modules import Usuarios, Jogos
-from helpers import Formulario_jogo, deleta_capa_antiga, recupera_capa
+from helpers import Formulario_jogo, FormularioUsuario, deleta_capa_antiga, recupera_capa
 
 # rota da api
 @app.route('/')
@@ -153,23 +153,28 @@ def login():
     # recupera a informacao que foi passada para a 'query string', ou seja, o valor que estiver na variavel 'proxima' na url
     proxima = request.args.get('proxima')
 
+    # instanciacao dos campos de formulario do 'flask_wtf' para validacoes dos inputs
+    form = FormularioUsuario()
+    
     # renderiza a pagina login, ja passando a 'query string' que foi recebida pela variavel
-    return render_template('login.html', proxima=proxima)
+    return render_template('login.html', proxima=proxima, form=form)
 
 
 # rota de intermediaria, que valida as informacoes de login antes de passar para a pagina 'index'
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
+    
+    # instanciacao dos campos do formulario do 'flask_wtf'
+    form = FormularioUsuario()
 
     # busca e filtra no banco de dados nome do usuario digitado no formulario html
-    usuario = Usuarios.query.filter_by(
-        nickname=request.form['usuario']).first()
+    usuario = Usuarios.query.filter_by(nickname=form.nickname.data).first()
 
     # caso o ususario exista...
     if usuario:
 
         # verifica se este usuario fitrado possui a mesma senha que foi digitada
-        if request.form['senha'] == usuario.senha:
+        if form.senha.data == usuario.senha:
 
             # 'session' permite armazenar dados de cookies, mas para isso, precisa de '.secretkey' para criptografar os cookies
             session['usuario_logado'] = usuario.nickname

@@ -1,7 +1,7 @@
 import os
 from jogoteca import app
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField
+from wtforms import StringField, validators, SubmitField, PasswordField
 
 
 class Formulario_jogo(FlaskForm):
@@ -9,7 +9,12 @@ class Formulario_jogo(FlaskForm):
     categoria = StringField('categoria', [validators.DataRequired(), validators.Length(max=40, min=1)])
     console = StringField('console', [validators.DataRequired(), validators.Length(max=20, min=1)])
     salvar = SubmitField('salvar')
-    
+
+# classe para validacao dos dados do formulario na pagina 'login.html'
+class FormularioUsuario(FlaskForm):
+    nickname = StringField('nickname', [validators.DataRequired(), validators.Length(max=8, min=1)])
+    senha = PasswordField('senha', [validators.DataRequired(), validators.Length(max=100, min=1)])
+    entrar = SubmitField('entrar')
 
 # busca na pasta de arquivos o nome o arquivo especifico
 def recupera_capa(id):
