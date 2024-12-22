@@ -12,7 +12,7 @@ import time
 
 from jogoteca import db, app
 from modules import Usuarios, Jogos
-from helpers import Formulario_jogo, FormularioUsuario, deleta_capa_antiga, recupera_capa
+from helpers import FormularioJogo, FormularioUsuario, deleta_capa_antiga, recupera_capa
 
 # rota da api
 @app.route('/')
@@ -36,16 +36,21 @@ def novo():
     # garante que se o usuario nao estiver loga, entao noa acessarava esta pagina
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect('/login?proxima=novo')
-    form = Formulario_jogo()
+    
+    # instanciacao dos campos de formulario do 'flask_wtf' para validacoes dos inputs
+    form = FormularioJogo()
     return render_template('novo.html', titulo='novo jogo', form=form)
 
 
 # rota intermediaria, que recebe os valores do formulario sem passar pelo url do navegador
 @app.route('/criar', methods=['POST',])
 def criar():
-    form = Formulario_jogo(request.form)
+    
+    # instanciacao dos campos do formulario do 'flask_wtf'
+    form = FormularioJogo()
 
-    if form.validate_on_submit():
+    # if not, caso os campos nao sejam validos, entao retorna para a rota 'novo()'
+    if not form.validate_on_submit():
         return redirect(url_for('novo'))
     
     # atributos do formulario de cadastro
@@ -88,7 +93,8 @@ def editar(id):
     # renderiza a pagina 'editar.html' com os dados do jogo que foi selecionado na pagina de lista
     jogo = Jogos.query.filter_by(id=id).first()
     
-    form = Formulario_jogo()
+    # instanciacao dos campos de formulario do 'flask_wtf' para validacoes dos inputs
+    form = FormularioJogo()
     form.nome.data = jogo.nome
     form.categoria.data = jogo.categoria
     form.console.data = jogo.console
@@ -100,15 +106,17 @@ def editar(id):
 # rota intermediaria, que atualiza um item selecionado na lista de jogos
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
-    form = Formulario_jogo(request.form)
+    
+    # instanciacao dos campos do formulario do 'flask_wtf'
+    form = FormularioJogo()
     
     if form.validate_on_submit():
 
         # para atualizar o jogo, as novas informações sobrescrevem os dados que estavam no banco de dados
         jogo = Jogos.query.filter_by(id=request.form['id']).first()
         jogo.nome = form.nome.data
-        jogo.categoria = form.console.data
-        jogo.console = form.console
+        jogo.categoria = form.categoria.data
+        jogo.console = form.console.data
 
         # ao adicionar o jogo com o mesmo id, ele sobrescreve o que estava gravado no banco de dado
         db.session.add(jogo)

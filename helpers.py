@@ -1,10 +1,13 @@
 import os
 from jogoteca import app
+
+# imports do flask_wtf para validacao dos inputs de formularios
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, SubmitField, PasswordField
 
 
-class Formulario_jogo(FlaskForm):
+# classe para validacao dos dados do formulario nas pagina 'novo.html' e 'editar.html'
+class FormularioJogo(FlaskForm):
     nome = StringField('nome do jogo', [validators.DataRequired(), validators.Length(max=50, min=1)])
     categoria = StringField('categoria', [validators.DataRequired(), validators.Length(max=40, min=1)])
     console = StringField('console', [validators.DataRequired(), validators.Length(max=20, min=1)])

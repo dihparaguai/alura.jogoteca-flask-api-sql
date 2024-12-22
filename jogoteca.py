@@ -24,7 +24,7 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 # funciona como um token, que gera numeros aleatorios, garantindo a segurança em formularios 'html'
-crf = CSRFProtect(app)
+csrf = CSRFProtect(app)
 
 # importa tudo que esta no arquivo 'views.py'
 from views import *

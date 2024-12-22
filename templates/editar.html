@@ -23,8 +23,9 @@
         <input type="hidden" name="id" value="{{ id }}">
 
         <!-- para que o formulario seja realmente enviado para o servidor, precisa do csfr_toke() do flask_wtf -->
-        {{ form.csfr_token() }}
+        {{ form.csrf_token() }}
         
+        <!-- inptus do formulario utilizando o 'flask_wtf' -->
         <div class="form-group">
             {{ form.nome.label(class="form-label") }}
             {{ form.nome(class="form-control") }}
